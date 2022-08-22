@@ -60,17 +60,17 @@ def post_save(model, os_path, contents_manager):
     out_file_base, _ = os.path.splitext(fname)
 
     if RUN_NB_BEFORE_SAVE:
-        tmp_name = 'tmp_{}'.format(fname)
-        cmd = 'jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=30 --output {} {}'.format(
-            tmp_name, os_path)
+        tmp_name = f'tmp_{fname}'
+        cmd = f'jupyter nbconvert --to notebook --execute --ExecutePreprocessor.timeout=30 --output {tmp_name} {os_path}'
+
         _run_cmd(cmd, cwd=dir_)
         source = tmp_name
 
     if SAVE_PY:
         out_dir_py = os.path.join(os.path.dirname(dir_), 'py')
         os.makedirs(out_dir_py, exist_ok=True)
-        cmd = 'jupyter nbconvert --to python --output-dir {} --output {}.py {}'.format(
-            out_dir_py, out_file_base, source)
+        cmd = f'jupyter nbconvert --to python --output-dir {out_dir_py} --output {out_file_base}.py {source}'
+
         _run_cmd(cmd, cwd=dir_)
 
     if SAVE_HTML:
@@ -85,8 +85,8 @@ def post_save(model, os_path, contents_manager):
 
         out_dir_html = os.path.join(os.path.dirname(dir_), 'html')
         os.makedirs(out_dir_html, exist_ok=True)
-        cmd = 'jupyter nbconvert --to html --output-dir {} --output {}.html {}'.format(
-            out_dir_html, out_file_base, source)
+        cmd = f'jupyter nbconvert --to html --output-dir {out_dir_html} --output {out_file_base}.html {source}'
+
         _run_cmd(cmd, cwd=dir_)
 
     if tmp_name:
